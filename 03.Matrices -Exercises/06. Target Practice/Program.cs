@@ -1,32 +1,82 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace _06.Target_Practice
+class FillMatrix
 {
-    public class Program
+    static void Main(string[] args)
     {
-        public static void Main()
+        var entry = Console.ReadLine().Split(new char[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        var rows = int.Parse(entry[0]);
+        var cols = int.Parse(entry[1]);
+        int[,] matrix = new int[rows, cols];
+        var text = Console.ReadLine();
+        var number = 0;
+        var changeDirection = true;
+        for (int row = rows - 1; row >= 0; row--)
         {
-            var sizeOfMatrix = Console.ReadLine()
-                .Split(new[] {' '},StringSplitOptions.RemoveEmptyEntries)
-                .Select(int.Parse)
-                .ToArray();
-            char[][] matrix = new char[sizeOfMatrix[0]][];
-            var text = Console.ReadLine();
-            for (int row = matrix.Length - 1; row >= 0; row--)
+            if (!changeDirection)
             {
-                matrix[row] = new char[sizeOfMatrix[1]];
-                foreach (var letter in text)
-                {                   
-                    for (int col = 0; col < matrix[row].Length; col++)
+                for (int col = 0; col < cols; col++)
+                {
+                    matrix[row, col] = text[number % text.Length];
+                    number++;
+                }
+            }
+            else
+            {
+                for (int col = cols - 1; col >= 0; col--)
+                {
+                    matrix[row, col] = text[number % text.Length];
+                    number++;
+                }
+            }
+            changeDirection = !changeDirection;
+        }
+        entry = Console.ReadLine().Split(new char[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        var rowC = int.Parse(entry[0]);
+        var colC = int.Parse(entry[1]);
+        var r = int.Parse(entry[2]);
+        int rCheck = r * r;
+        for (int row = 0; row < rows; row++)
+        {
+            for (int col = 0; col < cols; col++)
+            {
+                bool inCircle = ((row - rowC) * (row - rowC) + (col - colC) * (col - colC) <= rCheck);
+                if (inCircle)
+                {
+                    matrix[row, col] = ' ';
+                }
+            }
+        }
+        for (int col = 0; col < cols; col++)
+        {
+            for (int row = rows - 1; row > 0; row--)
+            {
+                if (matrix[row, col] == ' ')
+                {
+                    for (int j = row - 1; j >= 0; j--)
                     {
-                        
+                        if (matrix[j, col] != ' ')
+                        {
+                            matrix[row, col] = matrix[j, col];
+                            matrix[j, col] = ' ';
+                            break;
+                        }
                     }
                 }
             }
+        }
+        PrintMatrix(rows, cols, matrix);
+    }
+
+    private static void PrintMatrix(int rows, int cols, int[,] matrix)
+    {
+        for (int row = 0; row < rows; row++)
+        {
+            for (int col = 0; col < cols; col++)
+            {
+                Console.Write((char)matrix[row, col]);
+            }
+            Console.WriteLine();
         }
     }
 }
