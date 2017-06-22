@@ -15,16 +15,8 @@ namespace Problem_2___Jedi_Galaxy
                 .Select(int.Parse)
                 .ToArray();
             var matrix = new int[sizeOfMatrix[0]][];
-            var counter = 0;
-            for (int row = 0; row < matrix.Length; row++)
-            {
-                matrix[row] = new int[sizeOfMatrix[1]];
-                for (int col = 0; col < matrix[row].Length; col++)
-                {
-                    matrix[row][col] = counter;
-                    counter++;
-                }
-            }
+            matrix = BuildMatrix(matrix, sizeOfMatrix[1]);
+            
             var jedi = Console.ReadLine();
             var JediStartIndex = new int[2];
             var EvilStartIndex = new int[2];
@@ -42,35 +34,71 @@ namespace Problem_2___Jedi_Galaxy
                     .ToArray();
                 jedi = Console.ReadLine();
 
-                var evilRow = EvilStartIndex[0] - 1;
-                var evilCol = EvilStartIndex[1] - 1;
-                var JediRow = JediStartIndex[0] - 1;
-                var JediCol = JediStartIndex[1] - 1;
-                if (JediCol < 0)
+                var evilRow = EvilStartIndex[0];
+                var evilCol = EvilStartIndex[1];
+                var JediRow = JediStartIndex[0];
+                var JediCol = JediStartIndex[1];
+                //dark side
+                var rows = sizeOfMatrix[0];
+                var cols = sizeOfMatrix[1];
+                if (evilRow >= rows)
                 {
-                    JediCol = 0;
-                }
-                if (evilCol < 0)
-                {
-                    evilCol = 0;
+                    int shiftValue = evilRow - rows + 1;
+                    evilRow -= shiftValue;
+                    evilCol -= shiftValue;
                 }
 
-                for (int row = evilRow; row >= 0; row--)
+                if (evilCol >= cols)
                 {
-                    matrix[row][evilCol] = 0;
+                    int shiftValue = evilCol - cols + 1;
+                    evilRow -= shiftValue;
+                    evilCol -= shiftValue;
+                }
+
+
+                while (evilRow >= 0 && evilCol >= 0)
+                {
+                    matrix[evilRow][evilCol] = 0;
+                    evilRow--;
                     evilCol--;
                 }
 
-
-
-                var colAdder = 0;
-                for (int row = JediRow; row >= 0; row--)
+                if (JediRow >= rows)
                 {
-                    result += matrix[row][colAdder];
-                    colAdder++;
+                    int shiftedValue = JediRow - rows + 1;
+                    JediRow -= shiftedValue;
+                    JediCol += shiftedValue;
+                }
+                if (JediCol < 0)
+                {
+                    int shiftValue = Math.Abs(JediCol);
+                    JediRow -= shiftValue;
+                    JediCol += shiftValue;
+                }
+                
+                while (JediRow >= 0 && JediCol < cols)
+                {
+                    result += matrix[JediRow][JediCol];
+                    JediRow--;
+                    JediCol++;
                 }
             }
             Console.WriteLine(result);
+        }
+
+        private static int[][] BuildMatrix(int[][] matrix,int colsAdder)
+        {
+            var counter = 0;
+            for (int row = 0; row < matrix.Length; row++)
+            {
+                matrix[row] = new int[colsAdder];
+                for (int col = 0; col < matrix[row].Length; col++)
+                {
+                    matrix[row][col] = counter;
+                    counter++;
+                }
+            }
+            return matrix;
         }
     }
 }
