@@ -1,3 +1,2 @@
-# C-Sharp-Advanced---2016
-It's the first part of C# Fundamentals
-Course Link: https://softuni.bg/trainings/1633/csharp-advanced-may-2017
+# SoftwareUniversity C-Sharp-Advanced---2016
+[![Software University Logo](https://goo.gl/KYm0Tz)](https://tinyurl.com/yyhagh7d)
